@@ -34,4 +34,10 @@ public class ProdutoController {
         produtoService.cadastrarProduto(produto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @GetMapping(value="/{id}")
+    public ResponseEntity<Produto> findById(@PathVariable Long id){
+        Produto produto = produtoService.findById(id);
+        return ResponseEntity.status(HttpStatus.FOUND).body(produto);
+    }
 }
