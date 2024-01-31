@@ -1,5 +1,7 @@
 package com.gerenciamentoestoque.service;
 
+import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    private ProdutoMapper produtoMapper;
+
     public List<Produto> findAll(){
         return produtoRepository.findAll();
     }
@@ -22,9 +27,10 @@ public class ProdutoService {
         return produtoRepository.save(produto);
    }
 
-    public Produto findById(Long id){
+    public ProdutoDto findById(Long id){
         Optional<Produto> produto = produtoRepository.findById(id);
-        return produto.get();
+        Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDto(produto));
+        return produtoDto.get();
     }
 
     public void deleteProduto(Long id){

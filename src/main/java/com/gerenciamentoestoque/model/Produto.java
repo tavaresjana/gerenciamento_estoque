@@ -1,5 +1,6 @@
 package com.gerenciamentoestoque.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +19,11 @@ public class Produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column
     private String nomeProduto;
+    @Column
     private int sku;
+    @Column
     private BigDecimal preco;
 
 }

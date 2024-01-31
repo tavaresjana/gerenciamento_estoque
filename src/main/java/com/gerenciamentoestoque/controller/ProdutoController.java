@@ -1,5 +1,6 @@
 package com.gerenciamentoestoque.controller;
 
+import com.gerenciamentoestoque.dto.ProdutoDto;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,8 @@ public class ProdutoController {
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity<Produto> findById(@PathVariable Long id){
-        Produto produto = produtoService.findById(id);
+    public ResponseEntity<ProdutoDto> findById(@PathVariable Long id){
+        ProdutoDto produto = produtoService.findById(id);
         return ResponseEntity.status(HttpStatus.FOUND).body(produto);
     }
 
