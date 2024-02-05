@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -19,17 +20,19 @@ public class ProdutoService {
     @Autowired
     private ProdutoMapper produtoMapper;
 
-    public List<Produto> findAll(){
-        return produtoRepository.findAll();
+    public List<ProdutoDto> findAll(){
+        List<Produto> produtoList = produtoRepository.findAll();
+        List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
+        return listProdutoDto;
     }
 
-   public Produto cadastrarProduto(Produto produto){
-        return produtoRepository.save(produto);
+   public ProdutoDto cadastrarProduto(ProdutoDto produto){
+        return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produto)));
    }
 
     public ProdutoDto findById(Long id){
         Optional<Produto> produto = produtoRepository.findById(id);
-        Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDto(produto));
+        Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
         return produtoDto.get();
     }
 

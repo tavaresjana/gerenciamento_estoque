@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface ProdutoMapper {
 
-    ProdutoDto entidadeParaDto(Optional<Produto> produto);
+    ProdutoDto entidadeParaDtoOp(Optional<Produto> produto);
+    ProdutoDto entidadeParaDto(Produto produto);
 
     Produto dtoParaEntidade(ProdutoDto produtoDto);
 }

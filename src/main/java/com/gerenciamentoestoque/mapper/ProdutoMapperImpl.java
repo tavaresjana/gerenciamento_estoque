@@ -9,7 +9,7 @@ import java.util.Optional;
 @Component
 public class ProdutoMapperImpl implements ProdutoMapper {
 
-    public ProdutoDto entidadeParaDto(Optional<Produto> produto){
+    public ProdutoDto entidadeParaDtoOp(Optional<Produto> produto){
         ProdutoDto produtoDto = new ProdutoDto();
         produtoDto.setId(produto.get().getId());
         produtoDto.setNomeProduto(produto.get().getNomeProduto());
@@ -19,12 +19,22 @@ public class ProdutoMapperImpl implements ProdutoMapper {
     }
 
     @Override
+    public ProdutoDto entidadeParaDto(Produto produto) {
+        ProdutoDto produtoDto = new ProdutoDto();
+        produtoDto.setId(produto.getId());
+        produtoDto.setNomeProduto(produto.getNomeProduto());
+        produtoDto.setSku(produto.getSku());
+        produtoDto.setPreco(produto.getPreco());
+        return produtoDto;
+    }
+
+    @Override
     public Produto dtoParaEntidade(ProdutoDto produtoDto) {
         Produto produto = new Produto();
         produto.setId(produtoDto.getId());
-        produto.setNomeProduto(produto.getNomeProduto());
-        produto.setSku(produto.getSku());
-        produto.setPreco(produto.getPreco());
+        produto.setNomeProduto(produtoDto.getNomeProduto());
+        produto.setSku(produtoDto.getSku());
+        produto.setPreco(produtoDto.getPreco());
         return produto;
     }
 

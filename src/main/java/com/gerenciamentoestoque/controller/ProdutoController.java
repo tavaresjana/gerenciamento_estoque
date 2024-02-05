@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/produtos")
@@ -27,14 +28,14 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<Produto>> findAll(){
-        List<Produto> listaDeProduto = produtoService.findAll();
-        return ResponseEntity.status(HttpStatus.FOUND).body(listaDeProduto);
+    public ResponseEntity<List<ProdutoDto>> findAll(){
+        List<ProdutoDto> listProdutoDto = produtoService.findAll();
+        return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
     }
 
     @PostMapping
-    public ResponseEntity<Produto> cadastrarProduto(@RequestBody Produto produto){
-        produtoService.cadastrarProduto(produto);
+    public ResponseEntity<ProdutoDto> cadastrarProduto(@RequestBody ProdutoDto produtoDto){
+        produtoService.cadastrarProduto(produtoDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
