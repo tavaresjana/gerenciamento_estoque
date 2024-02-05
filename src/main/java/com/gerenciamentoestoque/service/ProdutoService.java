@@ -40,7 +40,7 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
-    public Produto atualizarProduto(Produto produto){
+    public ProdutoDto atualizarProduto(ProdutoDto produto){
         Optional<Produto> optionalProduto = produtoRepository.findById(produto.getId());
         Produto produtoEditado = optionalProduto.get();
 
@@ -48,6 +48,6 @@ public class ProdutoService {
         produtoEditado.setSku(produto.getSku());
         produtoEditado.setPreco(produto.getPreco());
         produtoRepository.save(produtoEditado);
-        return produtoEditado;
+        return produtoMapper.entidadeParaDto(produtoEditado);
     }
 }
