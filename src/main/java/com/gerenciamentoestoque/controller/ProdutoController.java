@@ -4,6 +4,7 @@ import com.gerenciamentoestoque.dto.ProdutoDto;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDto> cadastrarProduto(@RequestBody ProdutoDto produtoDto){
+    public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoDto produtoDto){
         produtoService.cadastrarProduto(produtoDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

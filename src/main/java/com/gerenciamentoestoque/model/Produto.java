@@ -19,10 +19,13 @@ public class Produto implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column
     private String nomeProduto;
-    @Column
-    private int sku;
+
+    @Column(unique = true)
+    private String sku;
+
     @Column
     private BigDecimal preco;
 
