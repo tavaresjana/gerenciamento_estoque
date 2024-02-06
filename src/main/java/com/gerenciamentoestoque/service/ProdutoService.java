@@ -21,31 +21,37 @@ public class ProdutoService {
     @Autowired
     private ProdutoMapper produtoMapper;
 
-    public List<ProdutoDto> findAll(){
+    public List<ProdutoDto> findAll() {
         List<Produto> produtoList = produtoRepository.findAll();
         List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
         return listProdutoDto;
     }
 
-   public ProdutoDto cadastrarProduto(ProdutoDto produto){
+    public ProdutoDto cadastrarProduto(ProdutoDto produto) {
         return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produto)));
-   }
-
-    public ProdutoDto findById(Long id){
-              Optional<Produto> produto = produtoRepository.findById(id);
-              if (produto.isEmpty() || produto == null) {
-                  throw new ProdutoNotFound();
-              }
-              Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
-              return produtoDto.get();
     }
 
-    public void deleteProduto(Long id){
+    public ProdutoDto findById(Long id) {
+        Optional<Produto> produto = produtoRepository.findById(id);
+        if (produto.isEmpty() || produto == null) {
+            throw new ProdutoNotFound();
+        }
+        Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
+        return produtoDto.get();
+    }
+
+    public void deleteProduto(Long id) {
+        if (produtoRepository.findById(id).isEmpty() || produtoRepository.findById(id) == null) {
+            throw new ProdutoNotFound();
+        }
         produtoRepository.deleteById(id);
     }
 
-    public ProdutoDto atualizarProduto(ProdutoDto produto){
+    public ProdutoDto atualizarProduto(ProdutoDto produto) {
         Optional<Produto> optionalProduto = produtoRepository.findById(produto.getId());
+        if (optionalProduto.isEmpty() || optionalProduto == null) {
+            throw new ProdutoNotFound();
+        }
         Produto produtoEditado = optionalProduto.get();
 
         produtoEditado.setNomeProduto(produto.getNomeProduto());
