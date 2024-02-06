@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.controller;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;

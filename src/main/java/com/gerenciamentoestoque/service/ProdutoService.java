@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
@@ -31,9 +32,12 @@ public class ProdutoService {
    }
 
     public ProdutoDto findById(Long id){
-        Optional<Produto> produto = produtoRepository.findById(id);
-        Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
-        return produtoDto.get();
+              Optional<Produto> produto = produtoRepository.findById(id);
+              if (produto.isEmpty() || produto == null) {
+                  throw new ProdutoNotFound();
+              }
+              Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
+              return produtoDto.get();
     }
 
     public void deleteProduto(Long id){
