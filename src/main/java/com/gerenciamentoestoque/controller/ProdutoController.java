@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.swing.text.html.Option;
@@ -32,6 +33,11 @@ public class ProdutoController {
     @GetMapping
     public ResponseEntity<List<ProdutoDto>> findAll(){
         List<ProdutoDto> listProdutoDto = produtoService.findAll();
+        return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
+    }
+    @GetMapping(value = "/sku{sku}")
+    public ResponseEntity<List<ProdutoDto>> findBySku(@RequestParam(value = "sku") @PathVariable String sku){
+        List<ProdutoDto> listProdutoDto = produtoService.findBySku(sku);
         return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
     }
 

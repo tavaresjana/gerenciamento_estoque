@@ -2,6 +2,7 @@ package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
+import com.gerenciamentoestoque.handler.exceptions.SkuInvalid;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
@@ -27,8 +28,25 @@ public class ProdutoService {
         return listProdutoDto;
     }
 
+    public List<ProdutoDto> findBySku(String sku) {
+        List<Produto> produtoList = produtoRepository.findBySku(sku);
+        List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
+        return listProdutoDto;
+    }
+
     public ProdutoDto cadastrarProduto(ProdutoDto produto) {
+        if (verificarSkuExiste(produto) == true) {
+            throw new SkuInvalid();
+        }
         return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produto)));
+    }
+
+    public Boolean verificarSkuExiste(ProdutoDto produtoDto) {
+        if (!produtoRepository.findBySku(produtoDto.getSku()).isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public ProdutoDto findById(Long id) {
