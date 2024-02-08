@@ -21,7 +21,6 @@ public class ProdutoDto implements Serializable {
 
     @NotNull
     @NotBlank(message = "O campo nome do produto é obrigatório.")
-    @Length(min = 2, max = 15, message = "O nome do produto deverá ter entre 2 e 15 caracteres.")
     private String nomeProduto;
 
     @NotNull

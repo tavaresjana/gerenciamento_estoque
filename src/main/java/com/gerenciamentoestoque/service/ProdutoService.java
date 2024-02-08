@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.handler.exceptions.NomeInvalid;
 import com.gerenciamentoestoque.handler.exceptions.PrecoInvalid;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.handler.exceptions.SkuInvalid;
@@ -39,7 +40,9 @@ public class ProdutoService {
         if (verificarSkuExiste(produto) == true) {
             throw new SkuInvalid();
         }
-
+        if (produto.getNomeProduto().length() < 2){
+            throw new NomeInvalid();
+        }
         if (produto.getPreco().doubleValue() < 0.00 || produto.getPreco() == null) {
             throw new PrecoInvalid();
         }
