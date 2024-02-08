@@ -28,8 +28,6 @@ public class ProdutoDto implements Serializable {
     @NotBlank(message = "O campo sku é obrigatório.")
     private String sku;
 
-    @NotNull(message = "O campo preço é obrigatório.")
-    @PositiveOrZero(message = "O preço deve ser um número positivo.")
     private BigDecimal preco;
 
 }

@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.handler.exceptions.PrecoInvalid;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.handler.exceptions.SkuInvalid;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
@@ -37,6 +38,10 @@ public class ProdutoService {
     public ProdutoDto cadastrarProduto(ProdutoDto produto) {
         if (verificarSkuExiste(produto) == true) {
             throw new SkuInvalid();
+        }
+
+        if (produto.getPreco().doubleValue() < 0.00 || produto.getPreco() == null) {
+            throw new PrecoInvalid();
         }
         return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produto)));
     }

@@ -1,5 +1,6 @@
 package com.gerenciamentoestoque.handler;
 
+import com.gerenciamentoestoque.handler.exceptions.PrecoInvalid;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.handler.exceptions.SkuInvalid;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,13 @@ public class ExceptionHandler {
     public ResponseEntity<StandardError> skuInvalid(SkuInvalid skuInvalid){
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), skuInvalid.getMessage());
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(PrecoInvalid.class)
+    public ResponseEntity<StandardError> precoInvalid(PrecoInvalid precoInvalid){
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+        StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), precoInvalid.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 }
