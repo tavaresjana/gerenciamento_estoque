@@ -37,23 +37,27 @@ public class ProdutoService {
     }
 
     public ProdutoDto cadastrarProduto(ProdutoDto produto) {
-        if (verificarSkuExiste(produto) == true) {
-            throw new SkuInvalid();
-        }
-        if (produto.getNomeProduto().length() < 2){
-            throw new NomeInvalid();
-        }
-        if (produto.getPreco().doubleValue() < 0.00 || produto.getPreco() == null) {
-            throw new PrecoInvalid();
-        }
+        verificarSkuExiste(produto);
+        verificarNome(produto);
+        verificarPreco(produto);
         return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produto)));
     }
 
-    public Boolean verificarSkuExiste(ProdutoDto produtoDto) {
+    public void verificarNome(ProdutoDto produtoDto){
+        if (produtoDto.getNomeProduto().length() < 2) {
+            throw new NomeInvalid();
+        }
+    }
+
+    public void verificarPreco(ProdutoDto produtoDto) {
+        if (produtoDto.getPreco().doubleValue() < 0.00) {
+            throw new PrecoInvalid();
+        }
+    }
+
+    public void verificarSkuExiste(ProdutoDto produtoDto) {
         if (!produtoRepository.findBySku(produtoDto.getSku()).isEmpty()) {
-            return true;
-        } else {
-            return false;
+            throw new SkuInvalid();
         }
     }
 

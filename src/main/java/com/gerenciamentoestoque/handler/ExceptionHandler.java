@@ -14,29 +14,29 @@ import java.time.Instant;
 public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(ProdutoNotFound.class)
-    public ResponseEntity<StandardError> produtoNotFound(ProdutoNotFound produtoNotFound){
+    public ResponseEntity<StandardError> produtoNotFound(ProdutoNotFound produtoNotFound) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), produtoNotFound.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(SkuInvalid.class)
-    public ResponseEntity<StandardError> skuInvalid(SkuInvalid skuInvalid){
+    public ResponseEntity<StandardError> skuInvalid(SkuInvalid skuInvalid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), skuInvalid.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(PrecoInvalid.class)
-    public ResponseEntity<StandardError> precoInvalid(PrecoInvalid precoInvalid){
+    public ResponseEntity<StandardError> precoInvalid(PrecoInvalid precoInvalid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), precoInvalid.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(NomeInvalid.class)
-    public ResponseEntity<StandardError> precoInvalid(NomeInvalid nomeInvalid){
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+    public ResponseEntity<StandardError> precoInvalid(NomeInvalid nomeInvalid) {
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), nomeInvalid.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
