@@ -18,15 +18,7 @@ public class ProdutoDto implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
-    @NotNull
-    @NotBlank(message = "O campo nome do produto é obrigatório.")
     private String nomeProduto;
-
-    @NotNull
-    @NotBlank(message = "O campo sku é obrigatório.")
     private String sku;
-
     private BigDecimal preco;
-
 }

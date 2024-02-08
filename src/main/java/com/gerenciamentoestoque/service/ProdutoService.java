@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.handler.exceptions.CampoVazio;
 import com.gerenciamentoestoque.handler.exceptions.NomeInvalid;
 import com.gerenciamentoestoque.handler.exceptions.PrecoInvalid;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
@@ -36,14 +37,12 @@ public class ProdutoService {
         return listProdutoDto;
     }
 
-    public ProdutoDto cadastrarProduto(ProdutoDto produto) {
-        verificarSkuExiste(produto);
-        verificarNome(produto);
-        verificarPreco(produto);
-        return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produto)));
+    public ProdutoDto cadastrarProduto(ProdutoDto produtoDto) {
+        verificaValidacoes(produtoDto);
+        return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produtoDto)));
     }
 
-    public void verificarNome(ProdutoDto produtoDto){
+    public void verificarNome(ProdutoDto produtoDto) {
         if (produtoDto.getNomeProduto().length() < 2) {
             throw new NomeInvalid();
         }
@@ -55,33 +54,49 @@ public class ProdutoService {
         }
     }
 
+    public void verificaCampoVazio(ProdutoDto produtoDto) {
+        if (produtoDto.getPreco() == null || produtoDto.getPreco().toString().isEmpty()
+                || produtoDto.getNomeProduto() == null || produtoDto.getNomeProduto().isEmpty()
+                || produtoDto.getSku() == null || produtoDto.getSku().isEmpty()) {
+            throw new CampoVazio();
+        }
+    }
+
     public void verificarSkuExiste(ProdutoDto produtoDto) {
         if (!produtoRepository.findBySku(produtoDto.getSku()).isEmpty()) {
             throw new SkuInvalid();
         }
     }
 
-    public ProdutoDto findById(Long id) {
-        Optional<Produto> produto = produtoRepository.findById(id);
-        if (produto.isEmpty() || produto == null) {
+    public void verificaValidacoes(ProdutoDto produtoDto) {
+        verificaCampoVazio(produtoDto);
+        verificarSkuExiste(produtoDto);
+        verificarNome(produtoDto);
+        verificarPreco(produtoDto);
+    }
+
+    public void verificaId(Long id) {
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+        if (produtoOptional.isEmpty() || produtoOptional == null) {
             throw new ProdutoNotFound();
         }
+    }
+
+    public ProdutoDto findById(Long id) {
+        Optional<Produto> produto = produtoRepository.findById(id);
+        verificaId(id);
         Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
         return produtoDto.get();
     }
 
     public void deleteProduto(Long id) {
-        if (produtoRepository.findById(id).isEmpty() || produtoRepository.findById(id) == null) {
-            throw new ProdutoNotFound();
-        }
+        verificaId(id);
         produtoRepository.deleteById(id);
     }
 
     public ProdutoDto atualizarProduto(ProdutoDto produto) {
         Optional<Produto> optionalProduto = produtoRepository.findById(produto.getId());
-        if (optionalProduto.isEmpty() || optionalProduto == null) {
-            throw new ProdutoNotFound();
-        }
+        verificaId(produto.getId());
         Produto produtoEditado = optionalProduto.get();
 
         produtoEditado.setNomeProduto(produto.getNomeProduto());

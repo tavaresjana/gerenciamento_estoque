@@ -2,7 +2,7 @@ package com.gerenciamentoestoque.handler.exceptions;
 
 public class PrecoInvalid extends RuntimeException {
 
-    public PrecoInvalid(){
+    public PrecoInvalid() {
         super("Preço inválido. O preço deve ser um número positivo.");
     }
 }

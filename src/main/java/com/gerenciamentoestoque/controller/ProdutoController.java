@@ -35,6 +35,7 @@ public class ProdutoController {
         List<ProdutoDto> listProdutoDto = produtoService.findAll();
         return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
     }
+
     @GetMapping(value = "/sku{sku}")
     public ResponseEntity<List<ProdutoDto>> findBySku(@RequestParam(value = "sku") @PathVariable String sku){
         List<ProdutoDto> listProdutoDto = produtoService.findBySku(sku);

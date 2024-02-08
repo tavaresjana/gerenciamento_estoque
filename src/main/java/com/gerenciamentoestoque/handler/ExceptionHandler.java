@@ -1,5 +1,6 @@
 package com.gerenciamentoestoque.handler;
 
+import com.gerenciamentoestoque.handler.exceptions.CampoVazio;
 import com.gerenciamentoestoque.handler.exceptions.NomeInvalid;
 import com.gerenciamentoestoque.handler.exceptions.PrecoInvalid;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
@@ -35,9 +36,16 @@ public class ExceptionHandler {
     }
 
     @org.springframework.web.bind.annotation.ExceptionHandler(NomeInvalid.class)
-    public ResponseEntity<StandardError> precoInvalid(NomeInvalid nomeInvalid) {
+    public ResponseEntity<StandardError> nomeInvalid(NomeInvalid nomeInvalid) {
         HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), nomeInvalid.getMessage());
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CampoVazio.class)
+    public ResponseEntity<StandardError> campoVazio(CampoVazio campoVazio) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), campoVazio.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 }
