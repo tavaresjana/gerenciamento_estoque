@@ -1,7 +1,6 @@
 package com.gerenciamentoestoque.controller;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
-import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.service.ProdutoService;
 import jakarta.validation.Valid;
@@ -18,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/produtos")
@@ -31,43 +27,43 @@ public class ProdutoController {
     private ProdutoService produtoService;
 
     @GetMapping
-    public ResponseEntity<List<ProdutoDto>> findAll(){
-        List<ProdutoDto> listProdutoDto = produtoService.findAll();
-        return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
+    public ResponseEntity<List<ProdutoDto>> buscarTodosProdutos() {
+        List<ProdutoDto> listaProdutoDto = produtoService.buscarTodosProdutos();
+        return ResponseEntity.status(HttpStatus.FOUND).body(listaProdutoDto);
     }
 
     @GetMapping(value = "/sku{sku}")
-    public ResponseEntity<List<ProdutoDto>> findBySku(@RequestParam(value = "sku") @PathVariable String sku){
-        List<ProdutoDto> listProdutoDto = produtoService.findBySku(sku);
-        return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
+    public ResponseEntity<List<ProdutoDto>> buscarPorSku(@RequestParam(value = "sku") @PathVariable String sku) {
+        List<ProdutoDto> listaProdutoDto = produtoService.buscarPorSku(sku);
+        return ResponseEntity.status(HttpStatus.FOUND).body(listaProdutoDto);
     }
 
     @GetMapping(value = "/nomeProduto{nomeProduto}")
-    public ResponseEntity<List<ProdutoDto>> buscaPorNome(@RequestParam(value="nomeProduto") @PathVariable String nomeProduto){
-        List<ProdutoDto> listProdutoDto = produtoService.buscaPorNome(nomeProduto);
-        return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
+    public ResponseEntity<List<ProdutoDto>> buscarPorNome(@RequestParam(value = "nomeProduto") @PathVariable String nomeProduto) {
+        List<ProdutoDto> listaProdutoDto = produtoService.buscarPorNome(nomeProduto);
+        return ResponseEntity.status(HttpStatus.FOUND).body(listaProdutoDto);
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoDto produtoDto){
+    public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoDto produtoDto) {
         produtoService.cadastrarProduto(produtoDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping(value="/{id}")
-    public ResponseEntity<ProdutoDto> findById(@PathVariable Long id){
-        ProdutoDto produto = produtoService.findById(id);
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<ProdutoDto> buscarPorId(@PathVariable Long id) {
+        ProdutoDto produto = produtoService.buscarPorId(id);
         return ResponseEntity.status(HttpStatus.FOUND).body(produto);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteProduto(@PathVariable Long id){
-        produtoService.deleteProduto(id);
+    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
+        produtoService.deletarProduto(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoDto produto){
+    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody ProdutoDto produto) {
         produtoService.atualizarProduto(produto);
         return ResponseEntity.ok().build();
     }

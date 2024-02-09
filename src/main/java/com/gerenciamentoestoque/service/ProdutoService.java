@@ -25,29 +25,29 @@ public class ProdutoService {
     @Autowired
     private ProdutoMapper produtoMapper;
 
-    public List<ProdutoDto> findAll() {
-        List<Produto> produtoList = produtoRepository.findAll();
-        List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
-        return listProdutoDto;
+    public List<ProdutoDto> buscarTodosProdutos() {
+        List<Produto> listaProduto = produtoRepository.findAll();
+        List<ProdutoDto> listaProdutoDto = listaProduto.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
+        return listaProdutoDto;
     }
 
-    public List<ProdutoDto> findBySku(String sku) {
-        List<Produto> produtoList = produtoRepository.findBySku(sku);
-        List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
-        return listProdutoDto;
+    public List<ProdutoDto> buscarPorSku(String sku) {
+        List<Produto> listaProduto = produtoRepository.buscarPorSku(sku);
+        List<ProdutoDto> listaProdutoDto = listaProduto.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
+        return listaProdutoDto;
     }
 
-    public List<ProdutoDto> buscaPorNome(String nomeProduto){
-        List<Produto> produtoList = produtoRepository.buscaPorNome(nomeProduto);
-        if (produtoList.isEmpty()){
+    public List<ProdutoDto> buscarPorNome(String nomeProduto) {
+        List<Produto> listaProduto = produtoRepository.buscarPorNome(nomeProduto);
+        if (listaProduto.isEmpty()) {
             throw new ProdutoNotFound();
         }
-        List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
-        return listProdutoDto;
+        List<ProdutoDto> listaProdutoDto = listaProduto.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
+        return listaProdutoDto;
     }
 
     public ProdutoDto cadastrarProduto(ProdutoDto produtoDto) {
-        verificaValidacoes(produtoDto);
+        verificarValidacoes(produtoDto);
         return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produtoDto)));
     }
 
@@ -63,7 +63,7 @@ public class ProdutoService {
         }
     }
 
-    public void verificaCampoVazio(ProdutoDto produtoDto) {
+    public void verificarCampoVazio(ProdutoDto produtoDto) {
         if (produtoDto.getPreco() == null || produtoDto.getPreco().toString().isEmpty()
                 || produtoDto.getNomeProduto() == null || produtoDto.getNomeProduto().isEmpty()
                 || produtoDto.getSku() == null || produtoDto.getSku().isEmpty()) {
@@ -72,40 +72,40 @@ public class ProdutoService {
     }
 
     public void verificarSkuExiste(ProdutoDto produtoDto) {
-        if (!produtoRepository.findBySku(produtoDto.getSku()).isEmpty()) {
+        if (!produtoRepository.buscarPorSku(produtoDto.getSku()).isEmpty()) {
             throw new SkuInvalid();
         }
     }
 
-    public void verificaValidacoes(ProdutoDto produtoDto) {
-        verificaCampoVazio(produtoDto);
+    public void verificarValidacoes(ProdutoDto produtoDto) {
+        verificarCampoVazio(produtoDto);
         verificarSkuExiste(produtoDto);
         verificarNome(produtoDto);
         verificarPreco(produtoDto);
     }
 
-    public void verificaId(Long id) {
+    public void verificarId(Long id) {
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if (produtoOptional.isEmpty() || produtoOptional == null) {
             throw new ProdutoNotFound();
         }
     }
 
-    public ProdutoDto findById(Long id) {
+    public ProdutoDto buscarPorId(Long id) {
         Optional<Produto> produto = produtoRepository.findById(id);
-        verificaId(id);
+        verificarId(id);
         Optional<ProdutoDto> produtoDto = Optional.ofNullable(produtoMapper.entidadeParaDtoOp(produto));
         return produtoDto.get();
     }
 
-    public void deleteProduto(Long id) {
-        verificaId(id);
+    public void deletarProduto(Long id) {
+        verificarId(id);
         produtoRepository.deleteById(id);
     }
 
     public ProdutoDto atualizarProduto(ProdutoDto produto) {
         Optional<Produto> optionalProduto = produtoRepository.findById(produto.getId());
-        verificaId(produto.getId());
+        verificarId(produto.getId());
         Produto produtoEditado = optionalProduto.get();
 
         produtoEditado.setNomeProduto(produto.getNomeProduto());
