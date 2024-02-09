@@ -1,11 +1,11 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProdutoDto;
-import com.gerenciamentoestoque.handler.exceptions.CampoVazio;
-import com.gerenciamentoestoque.handler.exceptions.NomeInvalid;
-import com.gerenciamentoestoque.handler.exceptions.PrecoInvalid;
-import com.gerenciamentoestoque.handler.exceptions.ProdutoNotFound;
-import com.gerenciamentoestoque.handler.exceptions.SkuInvalid;
+import com.gerenciamentoestoque.handler.exceptions.CampoVazioException;
+import com.gerenciamentoestoque.handler.exceptions.NomeInvalidoException;
+import com.gerenciamentoestoque.handler.exceptions.PrecoInvalidoException;
+import com.gerenciamentoestoque.handler.exceptions.ProdutoNaoEncontradoException;
+import com.gerenciamentoestoque.handler.exceptions.SkuInvalidoException;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
@@ -40,7 +40,7 @@ public class ProdutoService {
     public List<ProdutoDto> buscarPorNome(String nomeProduto) {
         List<Produto> listaProduto = produtoRepository.buscarPorNome(nomeProduto);
         if (listaProduto.isEmpty()) {
-            throw new ProdutoNotFound();
+            throw new ProdutoNaoEncontradoException();
         }
         List<ProdutoDto> listaProdutoDto = listaProduto.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
         return listaProdutoDto;
@@ -53,13 +53,13 @@ public class ProdutoService {
 
     public void verificarNome(ProdutoDto produtoDto) {
         if (produtoDto.getNomeProduto().length() < 2) {
-            throw new NomeInvalid();
+            throw new NomeInvalidoException();
         }
     }
 
     public void verificarPreco(ProdutoDto produtoDto) {
         if (produtoDto.getPreco().doubleValue() < 0.00) {
-            throw new PrecoInvalid();
+            throw new PrecoInvalidoException();
         }
     }
 
@@ -67,13 +67,13 @@ public class ProdutoService {
         if (produtoDto.getPreco() == null || produtoDto.getPreco().toString().isEmpty()
                 || produtoDto.getNomeProduto() == null || produtoDto.getNomeProduto().isEmpty()
                 || produtoDto.getSku() == null || produtoDto.getSku().isEmpty()) {
-            throw new CampoVazio();
+            throw new CampoVazioException();
         }
     }
 
     public void verificarSkuExiste(ProdutoDto produtoDto) {
         if (!produtoRepository.buscarPorSku(produtoDto.getSku()).isEmpty()) {
-            throw new SkuInvalid();
+            throw new SkuInvalidoException();
         }
     }
 
@@ -87,7 +87,7 @@ public class ProdutoService {
     public void verificarId(Long id) {
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if (produtoOptional.isEmpty() || produtoOptional == null) {
-            throw new ProdutoNotFound();
+            throw new ProdutoNaoEncontradoException();
         }
     }
 
