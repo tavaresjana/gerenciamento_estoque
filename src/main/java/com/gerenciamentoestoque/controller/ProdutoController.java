@@ -42,6 +42,12 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
     }
 
+    @GetMapping(value = "/nomeProduto{nomeProduto}")
+    public ResponseEntity<List<ProdutoDto>> buscaPorNome(@RequestParam(value="nomeProduto") @PathVariable String nomeProduto){
+        List<ProdutoDto> listProdutoDto = produtoService.buscaPorNome(nomeProduto);
+        return ResponseEntity.status(HttpStatus.FOUND).body(listProdutoDto);
+    }
+
     @PostMapping
     public ResponseEntity<ProdutoDto> cadastrarProduto(@Valid @RequestBody ProdutoDto produtoDto){
         produtoService.cadastrarProduto(produtoDto);

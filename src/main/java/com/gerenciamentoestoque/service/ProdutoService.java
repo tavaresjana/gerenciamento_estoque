@@ -37,6 +37,15 @@ public class ProdutoService {
         return listProdutoDto;
     }
 
+    public List<ProdutoDto> buscaPorNome(String nomeProduto){
+        List<Produto> produtoList = produtoRepository.buscaPorNome(nomeProduto);
+        if (produtoList.isEmpty()){
+            throw new ProdutoNotFound();
+        }
+        List<ProdutoDto> listProdutoDto = produtoList.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
+        return listProdutoDto;
+    }
+
     public ProdutoDto cadastrarProduto(ProdutoDto produtoDto) {
         verificaValidacoes(produtoDto);
         return produtoMapper.entidadeParaDto(produtoRepository.save(produtoMapper.dtoParaEntidade(produtoDto)));
