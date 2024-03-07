@@ -33,9 +33,9 @@ public class ProdutoController {
     }
 
     @GetMapping(value = "/sku{sku}")
-    public ResponseEntity<List<ProdutoDto>> buscarPorSku(@RequestParam(value = "sku") @PathVariable String sku) {
-        List<ProdutoDto> listaProdutoDto = produtoService.buscarPorSku(sku);
-        return ResponseEntity.status(HttpStatus.FOUND).body(listaProdutoDto);
+    public ResponseEntity<ProdutoDto> buscarPorSku(@RequestParam(value = "sku") @PathVariable String sku) {
+       ProdutoDto produtoDto = produtoService.buscarPorSku(sku);
+        return ResponseEntity.status(HttpStatus.FOUND).body(produtoDto);
     }
 
     @GetMapping(value = "/nomeProduto{nomeProduto}")

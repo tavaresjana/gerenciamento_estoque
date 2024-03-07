@@ -30,10 +30,11 @@ public class ProdutoService {
         return listaProdutoDto;
     }
 
-    public List<ProdutoDto> buscarPorSku(String sku) {
-        List<Produto> listaProduto = produtoRepository.buscarPorSku(sku);
-        List<ProdutoDto> listaProdutoDto = listaProduto.stream().map(produtoMapper::entidadeParaDto).collect(Collectors.toList());
-        return listaProdutoDto;
+    public ProdutoDto buscarPorSku(String sku) {
+        Produto produto = produtoRepository.buscarPorSku(sku);
+        validacoes.verificarSku(sku);
+        ProdutoDto produtoDto = produtoMapper.entidadeParaDto(produto);
+        return produtoDto;
     }
 
     public List<ProdutoDto> buscarPorNome(String nomeProduto) {

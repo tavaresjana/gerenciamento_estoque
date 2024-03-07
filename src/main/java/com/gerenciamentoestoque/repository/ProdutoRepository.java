@@ -10,7 +10,7 @@ import java.util.List;
 public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Query(value = "select u from Produto u where u.sku like %?1%")
-    List<Produto> buscarPorSku(String nome);
+    Produto buscarPorSku(String nome);
 
     @Query(value = "select u from Produto u where u.nomeProduto like %:nomeProduto%")
     List<Produto> buscarPorNome(@Param("nomeProduto") String nomeProduto);
