@@ -9,7 +9,9 @@ import com.gerenciamentoestoque.handler.exceptions.SkuInvalidoException;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -42,7 +44,7 @@ public class Validacoes {
     }
 
     public void verificarSkuExiste(ProdutoDto produtoDto) {
-        if (!produtoRepository.buscarPorSku(produtoDto.getSku()).isEmpty()) {
+        if (produtoRepository.buscarPorSku(produtoDto.getSku()) != null) {
             throw new SkuInvalidoException();
         }
     }
@@ -57,6 +59,13 @@ public class Validacoes {
     public void verificarId(Long id) {
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if (produtoOptional.isEmpty() || produtoOptional == null) {
+            throw new ProdutoNaoEncontradoException();
+        }
+    }
+
+    public void verificarSku(String sku){
+        Produto skuProduto = produtoRepository.buscarPorSku(sku);
+        if(skuProduto == null){
             throw new ProdutoNaoEncontradoException();
         }
     }
