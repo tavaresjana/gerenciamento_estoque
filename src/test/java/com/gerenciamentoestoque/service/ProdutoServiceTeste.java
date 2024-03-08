@@ -14,21 +14,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO;
+import static com.gerenciamentoestoque.constants.Constants.PRODUTO2;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.Assertions.catchThrowable;
+import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO2;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.util.Assert.isInstanceOf;
 
 @ExtendWith(MockitoExtension.class)
 public class ProdutoServiceTeste {
@@ -46,23 +43,22 @@ public class ProdutoServiceTeste {
     private ProdutoMapper produtoMapper;
 
 
-
     @Test
     public void buscarTodosProdutos() {
         //Criando lista de produto entidade
         List<Produto> listaProduto = new ArrayList<>();
         listaProduto.add(PRODUTO);
-        listaProduto.add(Constants.PRODUTO2);
+        listaProduto.add(PRODUTO2);
 
         //Criando lista de produto Dto
         List<ProdutoDto> listaProdutoDtoEsperada = new ArrayList<>();
         listaProdutoDtoEsperada.add(Constants.PRODUTO_DTO);
-        listaProdutoDtoEsperada.add(Constants.PRODUTO_DTO2);
+        listaProdutoDtoEsperada.add(PRODUTO_DTO2);
 
         // Mocks simulando retornos
         when(produtoRepository.findAll()).thenReturn(listaProduto);
         when(produtoMapper.entidadeParaDto(PRODUTO)).thenReturn(Constants.PRODUTO_DTO);
-        when(produtoMapper.entidadeParaDto(Constants.PRODUTO2)).thenReturn(Constants.PRODUTO_DTO2);
+        when(produtoMapper.entidadeParaDto(PRODUTO2)).thenReturn(PRODUTO_DTO2);
 
         // Método sendo chamado
         List<ProdutoDto> buscarTodosProdutos = produtoService.buscarTodosProdutos();
@@ -73,7 +69,7 @@ public class ProdutoServiceTeste {
     }
 
     @Test
-    public void buscarPorSku(){
+    public void buscarPorSkuTest() {
         when(produtoRepository.buscarPorSku("1287114")).thenReturn(PRODUTO);
         when(produtoMapper.entidadeParaDto(PRODUTO)).thenReturn(Constants.PRODUTO_DTO);
         ProdutoDto buscarPorSku = produtoService.buscarPorSku("1287114");
@@ -81,11 +77,41 @@ public class ProdutoServiceTeste {
     }
 
     @Test
-    public void buscarPorSku_ProdutoNaoEncontradoException() throws Exception{
+    public void buscarPorSkuProdutoNaoEncontradoException() throws Exception {
         String skuInvalido = "sku_invalido";
         doThrow(ProdutoNaoEncontradoException.class).when(validacoes).verificarSku("00000");
         assertThrows(ProdutoNaoEncontradoException.class, () -> {
             produtoService.buscarPorSku("00000");
         });
+    }
+
+    @Test
+    public void buscarPorNomeTest() {
+        List<Produto> listaProduto = new ArrayList<>();
+        listaProduto.add(PRODUTO);
+        listaProduto.add(PRODUTO2);
+
+        List<ProdutoDto> listaProdutoDto = new ArrayList<>();
+        listaProdutoDto.add(PRODUTO_DTO);
+        listaProdutoDto.add(PRODUTO_DTO2);
+
+        when(produtoRepository.buscarPorNome(PRODUTO.getNomeProduto())).thenReturn(listaProduto);
+
+        when(produtoMapper.entidadeParaDto(PRODUTO)).thenReturn(PRODUTO_DTO);
+        when(produtoMapper.entidadeParaDto(PRODUTO2)).thenReturn(PRODUTO_DTO2);
+
+        List<ProdutoDto> buscarPorNome = produtoService.buscarPorNome(PRODUTO.getNomeProduto());
+        assertEquals(listaProdutoDto.get(0), buscarPorNome.get(0));
+        assertEquals(listaProdutoDto.get(1), buscarPorNome.get(1));
+        Assertions.assertThat(buscarPorNome).isNotEmpty();
+    }
+
+    @Test
+    public void buscarPorNomeProdutoNaoEncontradoException() {
+        List<Produto> listaProdutoVazia = new ArrayList<>();
+        when(produtoRepository.buscarPorNome("a")).thenReturn(listaProdutoVazia);
+        Assertions.assertThatExceptionOfType(ProdutoNaoEncontradoException.class)
+                .isThrownBy(() -> produtoService.buscarPorNome("a"));
+        verify(produtoRepository, times(1)).buscarPorNome("a");
     }
 }
