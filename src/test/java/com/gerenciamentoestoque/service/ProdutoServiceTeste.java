@@ -13,15 +13,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO2;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO2;
+import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO_OP;
+import static com.gerenciamentoestoque.constants.Constants.PRODUTO_OP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -113,5 +118,13 @@ public class ProdutoServiceTeste {
         Assertions.assertThatExceptionOfType(ProdutoNaoEncontradoException.class)
                 .isThrownBy(() -> produtoService.buscarPorNome("a"));
         verify(produtoRepository, times(1)).buscarPorNome("a");
+    }
+
+    @Test
+    public void buscaPorIdTest(){
+        when(produtoRepository.findById(1L)).thenReturn(Optional.of(PRODUTO_OP));
+        when(produtoMapper.entidadeParaDtoOp(Optional.of(PRODUTO_OP))).thenReturn(PRODUTO_DTO_OP);
+        ProdutoDto buscarPorId = produtoService.buscarPorId(1L);
+        assertEquals(buscarPorId, PRODUTO_DTO_OP);
     }
 }
