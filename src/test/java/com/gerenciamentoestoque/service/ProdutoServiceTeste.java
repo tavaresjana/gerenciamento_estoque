@@ -25,8 +25,11 @@ import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO2;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO_OP;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_OP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -121,10 +124,54 @@ public class ProdutoServiceTeste {
     }
 
     @Test
-    public void buscaPorIdTest(){
+    public void buscarPorIdTest() {
         when(produtoRepository.findById(1L)).thenReturn(Optional.of(PRODUTO_OP));
         when(produtoMapper.entidadeParaDtoOp(Optional.of(PRODUTO_OP))).thenReturn(PRODUTO_DTO_OP);
         ProdutoDto buscarPorId = produtoService.buscarPorId(1L);
         assertEquals(buscarPorId, PRODUTO_DTO_OP);
     }
+
+    @Test
+    public void buscarPorIdProdutoNaoEncontradoException() {
+        doThrow(ProdutoNaoEncontradoException.class).when(validacoes).verificarId(1L);
+        assertThrows(ProdutoNaoEncontradoException.class, () -> {
+            produtoService.buscarPorId(1L);
+        });
+    }
+
+    @Test
+    public void deletarProdutoTest() {
+        doNothing().when(produtoRepository).deleteById(1L);
+        produtoService.deletarProduto(1L);
+        verify(produtoRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    public void deletarProdutoNaoEncontradoException() {
+        doThrow(ProdutoNaoEncontradoException.class).when(validacoes).verificarId(1L);
+        assertThrows(ProdutoNaoEncontradoException.class, () -> {
+            produtoService.deletarProduto(1L);
+        });
+    }
+
+
+    @Test
+    public void cadastrarProduto() {
+        ProdutoDto produtoDtoEntrada = Constants.PRODUTO_DTO;
+        Produto produtoEntidade = Constants.PRODUTO;
+        ProdutoDto produtoDtoEsperado = Constants.PRODUTO_DTO;
+
+        when(produtoMapper.dtoParaEntidade(produtoDtoEntrada)).thenReturn(produtoEntidade);
+        when(produtoRepository.save(produtoEntidade)).thenReturn(produtoEntidade);
+        when(produtoMapper.entidadeParaDto(produtoEntidade)).thenReturn(produtoDtoEsperado);
+
+        ProdutoDto resultado = produtoService.cadastrarProduto(produtoDtoEntrada);
+
+        assertNotNull(resultado);
+        assertEquals(produtoDtoEsperado, resultado);
+        verify(validacoes).verificarValidacoes(produtoDtoEntrada);
+        verify(produtoRepository).save(produtoEntidade);
+        verify(produtoMapper).entidadeParaDto(produtoEntidade);
+    }
+
 }
