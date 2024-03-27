@@ -2,7 +2,10 @@ package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.constants.Constants;
 import com.gerenciamentoestoque.dto.ProdutoDto;
+import com.gerenciamentoestoque.handler.exceptions.NomeInvalidoException;
+import com.gerenciamentoestoque.handler.exceptions.PrecoInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNaoEncontradoException;
+import com.gerenciamentoestoque.handler.exceptions.SkuInvalidoException;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
@@ -22,14 +25,14 @@ import static com.gerenciamentoestoque.constants.Constants.PRODUTO;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO2;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO2;
+import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO_NOME_INVALIDO;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO_OP;
+import static com.gerenciamentoestoque.constants.Constants.PRODUTO_DTO_PRECO_INVALIDO;
 import static com.gerenciamentoestoque.constants.Constants.PRODUTO_OP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -173,5 +176,49 @@ public class ProdutoServiceTeste {
         verify(produtoRepository).save(produtoEntidade);
         verify(produtoMapper).entidadeParaDto(produtoEntidade);
     }
+
+    @Test
+    public void cadastrarProdutoSkuExistenteException(){
+        doThrow(SkuInvalidoException.class).when(validacoes).verificarValidacoes(PRODUTO_DTO);
+        assertThrows(SkuInvalidoException.class, () -> {
+            produtoService.cadastrarProduto(PRODUTO_DTO);
+        });
+    }
+    @Test
+    public void cadastrarProdutoNomeInvalidoException(){
+        doThrow(NomeInvalidoException.class).when(validacoes).verificarValidacoes(PRODUTO_DTO_NOME_INVALIDO);
+        assertThrows(NomeInvalidoException.class, () -> {
+            produtoService.cadastrarProduto(PRODUTO_DTO_NOME_INVALIDO);
+        });
+    }
+
+    @Test
+    public void cadastrarProdutoPrecoInvalidoException(){
+        doThrow(PrecoInvalidoException.class).when(validacoes).verificarValidacoes(PRODUTO_DTO_PRECO_INVALIDO);
+        assertThrows(PrecoInvalidoException.class, () -> {
+            produtoService.cadastrarProduto(PRODUTO_DTO_PRECO_INVALIDO);
+        });
+    }
+
+    @Test
+    public void atualizarProdutoTest(){
+        Produto produto = Constants.PRODUTO;
+        ProdutoDto produtoDto = Constants.PRODUTO_DTO;
+
+        Produto produtoAtualizado = new Produto();
+        produtoAtualizado.setId(produto.getId());
+        produtoAtualizado.setNomeProduto("Nome do produto atualizado");
+        produtoAtualizado.setSku("SKU atualizado");
+        produtoAtualizado.setPreco(BigDecimal.valueOf(3.0)); // Preço atualizado
+
+        when(produtoRepository.findById(produtoDto.getId())).thenReturn(Optional.of(produtoAtualizado));
+        when(produtoMapper.entidadeParaDto(produtoAtualizado)).thenReturn(produtoDto);
+
+        ProdutoDto resultado = produtoService.atualizarProduto(produtoDto);
+
+        assertEquals(produtoDto, resultado);
+    }
+
+
 
 }
