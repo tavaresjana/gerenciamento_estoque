@@ -9,9 +9,7 @@ import com.gerenciamentoestoque.handler.exceptions.SkuInvalidoException;
 import com.gerenciamentoestoque.mapper.ProdutoMapper;
 import com.gerenciamentoestoque.model.Produto;
 import com.gerenciamentoestoque.repository.ProdutoRepository;
-import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
