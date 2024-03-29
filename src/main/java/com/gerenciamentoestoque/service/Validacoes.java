@@ -56,7 +56,7 @@ public class Validacoes {
 
     public void verificarId(Long id) {
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
-        if (produtoOptional.isEmpty() || produtoOptional == null) {
+        if (produtoOptional == null || produtoOptional.isEmpty()) {
             throw new ProdutoNaoEncontradoException();
         }
     }
