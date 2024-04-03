@@ -52,8 +52,15 @@ public class ProprietarioService {
     public ProprietarioDto desativarProprietario(Long id){
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
         Proprietario proprietarioEditado = optionalProprietario.get();
-
         proprietarioEditado.setAtivo(false);
+        proprietarioRepository.save(proprietarioEditado);
+        return proprietarioMapper.entidadeParaDto(proprietarioEditado);
+    }
+
+    public ProprietarioDto reativarProprietario(Long id){
+        Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
+        Proprietario proprietarioEditado = optionalProprietario.get();
+        proprietarioEditado.setAtivo(true);
         proprietarioRepository.save(proprietarioEditado);
         return proprietarioMapper.entidadeParaDto(proprietarioEditado);
     }

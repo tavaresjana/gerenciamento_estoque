@@ -56,4 +56,10 @@ public class ProprietarioController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping(value = "/reativar/{id}")
+    public ResponseEntity<ProprietarioDto> reativarProprietario(@PathVariable Long id){
+        proprietarioService.reativarProprietario(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
