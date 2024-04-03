@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +26,15 @@ public class ProprietarioService {
         return listaProprietarioDto;
     }
 
+    public ProprietarioDto buscarPorId(Long id){
+        Optional<Proprietario> proprietario = proprietarioRepository.findById(id);
+        Optional<ProprietarioDto> proprietarioDto = Optional.ofNullable(proprietarioMapper.entidadeParaDtoOp(proprietario));
+        return proprietarioDto.get();
+    }
+
+    public ProprietarioDto cadastrarProprietario(ProprietarioDto proprietarioDto){
+        return proprietarioMapper.entidadeParaDto(proprietarioRepository.save((proprietarioMapper.dtoParaEntidade(proprietarioDto))));
+    }
 
 
 }
