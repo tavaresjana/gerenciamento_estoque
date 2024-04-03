@@ -36,5 +36,26 @@ public class ProprietarioService {
         return proprietarioMapper.entidadeParaDto(proprietarioRepository.save((proprietarioMapper.dtoParaEntidade(proprietarioDto))));
     }
 
+    public ProprietarioDto atualizarProprietario(Long id, ProprietarioDto proprietarioDto){
+        Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
+
+        Proprietario proprietarioEditado = optionalProprietario.get();
+
+        proprietarioEditado.setNomeProprietario(proprietarioDto.getNomeProprietario());
+        proprietarioEditado.setCpf(proprietarioDto.getCpf());
+        proprietarioEditado.setCnpj(proprietarioDto.getCnpj());
+
+        proprietarioRepository.save(proprietarioEditado);
+        return proprietarioMapper.entidadeParaDto(proprietarioEditado);
+    }
+
+    public ProprietarioDto desativarProprietario(Long id){
+        Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
+        Proprietario proprietarioEditado = optionalProprietario.get();
+
+        proprietarioEditado.setAtivo(false);
+        proprietarioRepository.save(proprietarioEditado);
+        return proprietarioMapper.entidadeParaDto(proprietarioEditado);
+    }
 
 }

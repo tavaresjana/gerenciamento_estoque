@@ -15,4 +15,5 @@ public class ProprietarioDto {
     private String nomeProprietario;
     private String cpf;
     private String cnpj;
+    private Boolean ativo;
 }
