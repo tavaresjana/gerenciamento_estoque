@@ -35,5 +35,7 @@ public class Proprietario implements Serializable {
     @CNPJ
     private String cnpj;
 
+    private Boolean ativo;
+
 
 }
