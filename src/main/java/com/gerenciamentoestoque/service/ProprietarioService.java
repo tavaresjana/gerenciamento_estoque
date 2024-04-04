@@ -49,32 +49,42 @@ public class ProprietarioService {
         return proprietarioMapper.entidadeParaDto(proprietarioEditado);
     }
 
-    public ProprietarioDto desativarProprietario(Long id){
+    public void desativarProprietario(Long id){
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
         Proprietario proprietarioEditado = optionalProprietario.get();
         proprietarioEditado.setAtivo(false);
         proprietarioRepository.save(proprietarioEditado);
-        return proprietarioMapper.entidadeParaDto(proprietarioEditado);
     }
 
-    public ProprietarioDto reativarProprietario(Long id){
+    public void reativarProprietario(Long id){
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
         Proprietario proprietarioEditado = optionalProprietario.get();
         proprietarioEditado.setAtivo(true);
         proprietarioRepository.save(proprietarioEditado);
-        return proprietarioMapper.entidadeParaDto(proprietarioEditado);
     }
 
     public List<ProprietarioDto> buscarProprietariosAtivos(){
         List<Proprietario> listaProprietarios = proprietarioRepository.findAll();
-
         List<Proprietario> listaProprietariosAtivos = listaProprietarios.stream()
                 .filter(Proprietario::getAtivo)
                 .collect(Collectors.toList());
 
-        List<ProprietarioDto> listaProprietariosAtivosDto = listaProprietariosAtivos.stream().map(proprietarioMapper::entidadeParaDto).collect(Collectors.toList());
-
+        List<ProprietarioDto> listaProprietariosAtivosDto = listaProprietariosAtivos.stream()
+                .map(proprietarioMapper::entidadeParaDto)
+                .collect(Collectors.toList());
         return listaProprietariosAtivosDto;
+    }
+
+    public ProprietarioDto buscarPorCpf(String cpf){
+        Proprietario proprietario = proprietarioRepository.buscarPorCpf(cpf);
+        ProprietarioDto proprietarioDto = proprietarioMapper.entidadeParaDto(proprietario);
+        return proprietarioDto;
+    }
+
+    public ProprietarioDto buscarPorCnpj(String cnpj){
+        Proprietario proprietario = proprietarioRepository.buscarPorCnpj(cnpj);
+        ProprietarioDto proprietarioDto = proprietarioMapper.entidadeParaDto(proprietario);
+        return proprietarioDto;
     }
 
 }
