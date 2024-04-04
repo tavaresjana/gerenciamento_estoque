@@ -43,9 +43,10 @@ public class ProprietarioController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping(value="/{id}")
-    public ResponseEntity<ProprietarioDto> atualizarProprietario(@PathVariable Long id, @RequestBody ProprietarioDto proprietarioDto){
-        proprietarioService.atualizarProprietario(id, proprietarioDto);
+   // @PutMapping(value="/{id}")
+    @PutMapping
+    public ResponseEntity<ProprietarioDto> atualizarProprietario(@RequestBody ProprietarioDto proprietarioDto){
+        proprietarioService.atualizarProprietario(proprietarioDto);
         return ResponseEntity.ok().build();
     }
 
