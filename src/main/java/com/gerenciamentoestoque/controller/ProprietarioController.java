@@ -50,7 +50,7 @@ public class ProprietarioController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value="/{id}")
+    @DeleteMapping(value="/desativar/{id}")
     public ResponseEntity<ProprietarioDto> desativarProprietario(@PathVariable Long id){
         proprietarioService.desativarProprietario(id);
         return ResponseEntity.noContent().build();
@@ -60,6 +60,12 @@ public class ProprietarioController {
     public ResponseEntity<ProprietarioDto> reativarProprietario(@PathVariable Long id){
         proprietarioService.reativarProprietario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value="/ativos")
+    public ResponseEntity<List<ProprietarioDto>> buscarProprietariosAtivos(ProprietarioDto proprietarioDto){
+        List<ProprietarioDto> listaProprietarioAtivoDto = proprietarioService.buscarProprietariosAtivos();
+        return ResponseEntity.status(HttpStatus.OK).body(listaProprietarioAtivoDto);
     }
 
 }

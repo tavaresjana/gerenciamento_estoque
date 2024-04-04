@@ -65,4 +65,16 @@ public class ProprietarioService {
         return proprietarioMapper.entidadeParaDto(proprietarioEditado);
     }
 
+    public List<ProprietarioDto> buscarProprietariosAtivos(){
+        List<Proprietario> listaProprietarios = proprietarioRepository.findAll();
+
+        List<Proprietario> listaProprietariosAtivos = listaProprietarios.stream()
+                .filter(Proprietario::getAtivo)
+                .collect(Collectors.toList());
+
+        List<ProprietarioDto> listaProprietariosAtivosDto = listaProprietariosAtivos.stream().map(proprietarioMapper::entidadeParaDto).collect(Collectors.toList());
+
+        return listaProprietariosAtivosDto;
+    }
+
 }
