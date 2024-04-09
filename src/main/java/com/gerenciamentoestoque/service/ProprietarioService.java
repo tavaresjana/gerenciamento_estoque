@@ -18,6 +18,9 @@ public class ProprietarioService {
     private ProprietarioRepository proprietarioRepository;
 
     @Autowired
+    private ValidacoesProprietario validacoesProprietario;
+
+    @Autowired
     private ProprietarioMapper proprietarioMapper;
 
     public List<ProprietarioDto> buscarTodosProprietarios() {
@@ -28,6 +31,7 @@ public class ProprietarioService {
 
     public ProprietarioDto buscarPorId(Long id) {
         Optional<Proprietario> proprietario = proprietarioRepository.findById(id);
+        validacoesProprietario.verificarId(id);
         Optional<ProprietarioDto> proprietarioDto = Optional.ofNullable(proprietarioMapper.entidadeParaDtoOp(proprietario));
         return proprietarioDto.get();
     }
