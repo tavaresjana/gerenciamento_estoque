@@ -4,6 +4,7 @@ import com.gerenciamentoestoque.handler.exceptions.CampoVazioException;
 import com.gerenciamentoestoque.handler.exceptions.NomeInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.PrecoInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNaoEncontradoException;
+import com.gerenciamentoestoque.handler.exceptions.ProprietarioNaoEncontradoException;
 import com.gerenciamentoestoque.handler.exceptions.SkuInvalidoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,13 @@ public class ExceptionHandler {
     public ResponseEntity<StandardError> campoVazioException(CampoVazioException campoVazioException) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), campoVazioException.getMessage());
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(ProprietarioNaoEncontradoException.class)
+    public ResponseEntity<StandardError> proprietarioNaoEncontradoException(ProprietarioNaoEncontradoException proprietarioNaoEncontradoException) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), proprietarioNaoEncontradoException.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 }
