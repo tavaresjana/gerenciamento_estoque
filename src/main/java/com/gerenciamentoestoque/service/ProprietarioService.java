@@ -1,7 +1,6 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProprietarioDto;
-import com.gerenciamentoestoque.handler.exceptions.CnpjInvalidoException;
 import com.gerenciamentoestoque.mapper.ProprietarioMapper;
 import com.gerenciamentoestoque.model.Proprietario;
 import com.gerenciamentoestoque.repository.ProprietarioRepository;
@@ -44,12 +43,9 @@ public class ProprietarioService {
 
     public ProprietarioDto atualizarProprietario(ProprietarioDto proprietarioDto) {
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(proprietarioDto.getId());
-
         Proprietario proprietarioEditado = optionalProprietario.get();
-
         proprietarioEditado.setNomeProprietario(proprietarioDto.getNomeProprietario());
         proprietarioEditado.setCnpj(proprietarioDto.getCnpj());
-
         proprietarioRepository.save(proprietarioEditado);
         return proprietarioMapper.entidadeParaDto(proprietarioEditado);
     }
