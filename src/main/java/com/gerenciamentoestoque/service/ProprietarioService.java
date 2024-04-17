@@ -89,13 +89,9 @@ public class ProprietarioService {
 
     public static String formatarCNPJ(String valor) {
         valor = valor.replaceAll("[^0-9]", "");
-        if (valor.length() == 14) {
-            return valor.substring(0, 2) + "." + valor.substring(2, 5) + "." +
-                    valor.substring(5, 8) + "/" + valor.substring(8, 12) + "-" +
-                    valor.substring(12);
-        } else {
-            return null;
-        }
+        return valor.substring(0, 2) + "." + valor.substring(2, 5) + "." +
+                valor.substring(5, 8) + "/" + valor.substring(8, 12) + "-" +
+                valor.substring(12);
     }
-
 }
+
