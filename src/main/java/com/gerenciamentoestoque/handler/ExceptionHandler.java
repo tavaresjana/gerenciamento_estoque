@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.handler;
 
 import com.gerenciamentoestoque.handler.exceptions.CampoVazioException;
+import com.gerenciamentoestoque.handler.exceptions.CnpjInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.NomeInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.PrecoInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNaoEncontradoException;
@@ -50,10 +51,19 @@ public class ExceptionHandler {
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 
+    //proprietario
+
     @org.springframework.web.bind.annotation.ExceptionHandler(ProprietarioNaoEncontradoException.class)
     public ResponseEntity<StandardError> proprietarioNaoEncontradoException(ProprietarioNaoEncontradoException proprietarioNaoEncontradoException) {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), proprietarioNaoEncontradoException.getMessage());
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(CnpjInvalidoException.class)
+    public ResponseEntity<StandardError> cpfInvalidoException(CnpjInvalidoException cnpjInvalidoException) {
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), cnpjInvalidoException.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 }
