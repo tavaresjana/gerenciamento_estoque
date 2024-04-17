@@ -37,6 +37,8 @@ public class ProprietarioService {
     }
 
     public ProprietarioDto cadastrarProprietario(ProprietarioDto proprietarioDto) {
+        validacoesProprietario.verificarCampoCpf(proprietarioDto);
+        validacoesProprietario.verificarCampoCnpj(proprietarioDto);
         return proprietarioMapper.entidadeParaDto(proprietarioRepository.save((proprietarioMapper.dtoParaEntidade(proprietarioDto))));
     }
 
