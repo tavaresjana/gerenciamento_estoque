@@ -38,11 +38,13 @@ public class ProprietarioService {
 
     public ProprietarioDto cadastrarProprietario(ProprietarioDto proprietarioDto) {
         validacoesProprietario.verificarCampoCnpj(proprietarioDto);
+        validacoesProprietario.verificarCnpjExiste(proprietarioDto);
         return proprietarioMapper.entidadeParaDto(proprietarioRepository.save((proprietarioMapper.dtoParaEntidade(proprietarioDto))));
     }
 
     public ProprietarioDto atualizarProprietario(ProprietarioDto proprietarioDto) {
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(proprietarioDto.getId());
+        validacoesProprietario.verificarId(proprietarioDto.getId());
         Proprietario proprietarioEditado = optionalProprietario.get();
         proprietarioEditado.setNomeProprietario(proprietarioDto.getNomeProprietario());
         proprietarioEditado.setCnpj(proprietarioDto.getCnpj());
@@ -51,6 +53,7 @@ public class ProprietarioService {
     }
 
     public void desativarProprietario(Long id) {
+        validacoesProprietario.verificarId(id);
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
         Proprietario proprietarioEditado = optionalProprietario.get();
         proprietarioEditado.setAtivo(false);
@@ -58,6 +61,7 @@ public class ProprietarioService {
     }
 
     public void reativarProprietario(Long id) {
+        validacoesProprietario.verificarId(id);
         Optional<Proprietario> optionalProprietario = proprietarioRepository.findById(id);
         Proprietario proprietarioEditado = optionalProprietario.get();
         proprietarioEditado.setAtivo(true);
@@ -79,6 +83,7 @@ public class ProprietarioService {
 
     public ProprietarioDto buscarPorCnpj(String cnpj) {
         Proprietario proprietario = proprietarioRepository.buscarPorCnpj(formatarCNPJ(cnpj));
+        validacoesProprietario.verificarCnpj(cnpj);
         ProprietarioDto proprietarioDto = proprietarioMapper.entidadeParaDto(proprietario);
         return proprietarioDto;
     }
