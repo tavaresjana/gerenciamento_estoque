@@ -68,11 +68,6 @@ public class ProprietarioController {
         return ResponseEntity.status(HttpStatus.OK).body(listaProprietarioAtivoDto);
     }
 
-    @GetMapping(value="/cpf{cpf}")
-    public ResponseEntity<ProprietarioDto> buscarPorCpf(@RequestParam(value="cpf") @PathVariable String cpf){
-        ProprietarioDto proprietarioDto = proprietarioService.buscarPorCpf(cpf);
-        return ResponseEntity.status(HttpStatus.OK).body(proprietarioDto);
-    }
 
     @GetMapping(value="/cnpj{cnpj}")
     public ResponseEntity<ProprietarioDto> buscarPorCnpj(@RequestParam(value="cnpj") @PathVariable String cnpj){

@@ -1,6 +1,7 @@
 package com.gerenciamentoestoque.service;
 
 import com.gerenciamentoestoque.dto.ProprietarioDto;
+import com.gerenciamentoestoque.handler.exceptions.CnpjInvalidoException;
 import com.gerenciamentoestoque.mapper.ProprietarioMapper;
 import com.gerenciamentoestoque.model.Proprietario;
 import com.gerenciamentoestoque.repository.ProprietarioRepository;
@@ -37,7 +38,6 @@ public class ProprietarioService {
     }
 
     public ProprietarioDto cadastrarProprietario(ProprietarioDto proprietarioDto) {
-        validacoesProprietario.verificarCampoCpf(proprietarioDto);
         validacoesProprietario.verificarCampoCnpj(proprietarioDto);
         return proprietarioMapper.entidadeParaDto(proprietarioRepository.save((proprietarioMapper.dtoParaEntidade(proprietarioDto))));
     }
@@ -48,7 +48,6 @@ public class ProprietarioService {
         Proprietario proprietarioEditado = optionalProprietario.get();
 
         proprietarioEditado.setNomeProprietario(proprietarioDto.getNomeProprietario());
-        proprietarioEditado.setCpf(proprietarioDto.getCpf());
         proprietarioEditado.setCnpj(proprietarioDto.getCnpj());
 
         proprietarioRepository.save(proprietarioEditado);
@@ -81,31 +80,21 @@ public class ProprietarioService {
         return listaProprietariosAtivosDto;
     }
 
-    public ProprietarioDto buscarPorCpf(String cpf) {
-        Proprietario proprietario = proprietarioRepository.buscarPorCpf(formatarCPFouCNPJ(cpf));
-        ProprietarioDto proprietarioDto = proprietarioMapper.entidadeParaDto(proprietario);
-        return proprietarioDto;
-    }
 
     public ProprietarioDto buscarPorCnpj(String cnpj) {
-        Proprietario proprietario = proprietarioRepository.buscarPorCnpj(formatarCPFouCNPJ(cnpj));
+        Proprietario proprietario = proprietarioRepository.buscarPorCnpj(formatarCNPJ(cnpj));
         ProprietarioDto proprietarioDto = proprietarioMapper.entidadeParaDto(proprietario);
         return proprietarioDto;
     }
 
-    public static String formatarCPFouCNPJ(String valor) {
+    public static String formatarCNPJ(String valor) {
         valor = valor.replaceAll("[^0-9]", "");
-        if (valor.length() == 11) {
-            return valor.substring(0, 3) + "." + valor.substring(3, 6) + "." +
-                    valor.substring(6, 9) + "-" + valor.substring(9);
-
-        } else if (valor.length() == 14) {
+        if (valor.length() == 14) {
             return valor.substring(0, 2) + "." + valor.substring(2, 5) + "." +
                     valor.substring(5, 8) + "/" + valor.substring(8, 12) + "-" +
                     valor.substring(12);
         } else {
             return null;
-            //add verificação de tamanho invalido p cpf
         }
     }
 

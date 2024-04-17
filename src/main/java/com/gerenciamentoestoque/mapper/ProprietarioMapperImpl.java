@@ -15,7 +15,6 @@ public class ProprietarioMapperImpl implements ProprietarioMapper{
         ProprietarioDto proprietarioDto = new ProprietarioDto();
         proprietarioDto.setId(proprietario.get().getId());
         proprietarioDto.setNomeProprietario(proprietario.get().getNomeProprietario());
-        proprietarioDto.setCpf(proprietario.get().getCpf());
         proprietarioDto.setCnpj(proprietario.get().getCnpj());
         proprietarioDto.setAtivo(proprietario.get().getAtivo());
         return proprietarioDto;
@@ -26,7 +25,6 @@ public class ProprietarioMapperImpl implements ProprietarioMapper{
         ProprietarioDto proprietarioDto = new ProprietarioDto();
         proprietarioDto.setId(proprietario.getId());
         proprietarioDto.setNomeProprietario(proprietario.getNomeProprietario());
-        proprietarioDto.setCpf(proprietario.getCpf());
         proprietarioDto.setCnpj(proprietario.getCnpj());
         proprietarioDto.setAtivo(proprietario.getAtivo());
         return proprietarioDto;
@@ -37,7 +35,6 @@ public class ProprietarioMapperImpl implements ProprietarioMapper{
         Proprietario proprietario = new Proprietario();
         proprietario.setId(proprietarioDto.getId());
         proprietario.setNomeProprietario(proprietarioDto.getNomeProprietario());
-        proprietario.setCpf(proprietarioDto.getCpf());
         proprietario.setCnpj(proprietarioDto.getCnpj());
         proprietario.setAtivo(proprietarioDto.getAtivo());
         return proprietario;

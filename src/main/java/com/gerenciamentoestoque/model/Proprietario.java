@@ -29,9 +29,6 @@ public class Proprietario implements Serializable {
     @Column
     private String nomeProprietario;
 
-    @CPF
-    private String cpf;
-
     @CNPJ
     private String cnpj;
 
