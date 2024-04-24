@@ -15,8 +15,8 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "proprietario")
 public class Proprietario implements Serializable {
