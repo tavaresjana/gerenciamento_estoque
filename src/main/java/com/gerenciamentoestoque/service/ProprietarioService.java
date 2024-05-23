@@ -68,16 +68,10 @@ public class ProprietarioService {
         proprietarioRepository.save(proprietarioEditado);
     }
 
-    public List<ProprietarioDto> buscarProprietariosAtivos() {
-        List<Proprietario> listaProprietarios = proprietarioRepository.findAll();
-        List<Proprietario> listaProprietariosAtivos = listaProprietarios.stream()
-                .filter(Proprietario::getAtivo)
-                .collect(Collectors.toList());
-
-        List<ProprietarioDto> listaProprietariosAtivosDto = listaProprietariosAtivos.stream()
-                .map(proprietarioMapper::entidadeParaDto)
-                .collect(Collectors.toList());
-        return listaProprietariosAtivosDto;
+    public List<ProprietarioDto> buscarProprietariosAtivos(){
+        List<Proprietario> proprietariosAtivosLista = proprietarioRepository.buscarProprietariosAtivos();
+        List<ProprietarioDto> proprietariosAtivosListaDtos = proprietariosAtivosLista.stream().map(proprietarioMapper::entidadeParaDto).collect(Collectors.toList());
+        return proprietariosAtivosListaDtos;
     }
 
 
