@@ -6,8 +6,11 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +34,30 @@ public class UnidadeController {
     public ResponseEntity<UnidadeDto> cadastrarUnidade(@Valid @RequestBody UnidadeDto unidadeDto) {
         unidadeService.cadastrarUnidade(unidadeDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<UnidadeDto> buscarPorId(@PathVariable Long id) {
+        UnidadeDto unidade = unidadeService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.FOUND).body(unidade);
+    }
+
+    @PutMapping
+    public ResponseEntity<UnidadeDto> atualizarUnidade(@RequestBody UnidadeDto unidadeDto){
+        unidadeService.atualizarUnidade(unidadeDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> deletarUnidade(@PathVariable Long id) {
+        unidadeService.deletarUnidade(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/proprietario/{proprietarioId}")
+    public ResponseEntity<List<UnidadeDto>> buscarUnidadesPorProprietario(@PathVariable Long proprietarioId) {
+        List<UnidadeDto> unidades = unidadeService.buscarUnidadesPorProprietario(proprietarioId);
+        return ResponseEntity.ok(unidades);
     }
 
 }
