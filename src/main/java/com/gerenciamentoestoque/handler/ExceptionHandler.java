@@ -7,6 +7,7 @@ import com.gerenciamentoestoque.handler.exceptions.PrecoInvalidoException;
 import com.gerenciamentoestoque.handler.exceptions.ProdutoNaoEncontradoException;
 import com.gerenciamentoestoque.handler.exceptions.ProprietarioNaoEncontradoException;
 import com.gerenciamentoestoque.handler.exceptions.SkuInvalidoException;
+import com.gerenciamentoestoque.handler.exceptions.UnidadeNaoEncontradaException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -64,6 +65,15 @@ public class ExceptionHandler {
     public ResponseEntity<StandardError> cpfInvalidoException(CnpjInvalidoException cnpjInvalidoException) {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), cnpjInvalidoException.getMessage());
+        return ResponseEntity.status(httpStatus).body(standardError);
+    }
+
+    //Unidade
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(UnidadeNaoEncontradaException.class)
+    public ResponseEntity<StandardError> unidadeNaoEncontradaException(UnidadeNaoEncontradaException unidadeNaoEncontradaException) {
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+        StandardError standardError = new StandardError(Instant.now(), httpStatus.value(), unidadeNaoEncontradaException.getMessage());
         return ResponseEntity.status(httpStatus).body(standardError);
     }
 }

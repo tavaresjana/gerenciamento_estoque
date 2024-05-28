@@ -22,7 +22,7 @@ public class Validacoes {
     @Autowired
     private ProdutoMapper produtoMapper;
     public void verificarNome(ProdutoDto produtoDto) {
-        if (produtoDto.getNomeProduto().length() < 2) {
+        if (produtoDto.getNomeProduto().length() < 2 && produtoDto.getNomeProduto().length() > 15) {
             throw new NomeInvalidoException();
         }
     }
